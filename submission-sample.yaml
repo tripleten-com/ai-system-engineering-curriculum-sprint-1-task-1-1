@@ -1,0 +1,22 @@
+# Coldline - Task 1.1
+# File: submission-sample.yaml
+# Component: Fictional answer example
+# Purpose: Show the required answer shape without giving Task answers.
+# Interacts With: Submission schema and public verifier
+# Sprint/Task: Sprint 1 - Project 1 / Task 1.1
+# Concepts: Evidence structure
+# Tools: YAML
+
+# Fictional shape example only. These answers do not describe Coldline.
+answers:
+  runtime_state: ready
+  scenario_id: fictional-orientation-scenario
+  active_ports:
+    - Retriever
+  trace_reference: 0123456789abcdef0123456789abcdef
+  observation: |
+    The fictional request produced a visible service response and trace in the local tool.
+  unresolved_gap: |
+    Background work was outside the boundary of this fictional example.
+  fidelity_limitation: |
+    This local fictional run does not prove managed-service or production-scale behavior.

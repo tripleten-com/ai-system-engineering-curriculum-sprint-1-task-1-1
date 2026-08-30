@@ -1,0 +1,31 @@
+# Coldline - Task 1.1
+# File: submission.yaml
+# Component: Student answer sheet
+# Purpose: Record direct Task 1.1 runtime observations.
+# Interacts With: Submission schema and public verifier
+# Sprint/Task: Sprint 1 - Project 1 / Task 1.1
+# Concepts: Versioned engineering evidence
+# Tools: YAML
+
+# Complete each answer after running the published Task 1.1 scenario.
+# Empty values and placeholder text fail public verification.
+# Do not submit secrets, personal data, local absolute paths, or protected evaluator details.
+# See submission-sample.yaml for a completed fictional shape.
+answers:
+  # Runtime result. Allowed values: ready or blocked.
+  runtime_state: ""
+  # Scenario identifier printed by `poe scenario`; 8-100 characters.
+  scenario_id: ""
+  # Active interface names from the five visible ports; include at least one unique value.
+  active_ports: []
+  # One lowercase 32-hex Jaeger trace ID, without a URL or personal path.
+  trace_reference: ""
+  # The `|` begins a multiline string. Write 40-1000 characters of observed evidence.
+  observation: |
+    Replace this line with one reproducible observation.
+  # The `|` begins a multiline string. Write 20-1000 characters about an unresolved gap.
+  unresolved_gap: |
+    Replace this line with one evidence gap.
+  # The `|` begins a multiline string. Write 30-1000 characters about local fidelity.
+  fidelity_limitation: |
+    Replace this line with one local-runtime limitation.
