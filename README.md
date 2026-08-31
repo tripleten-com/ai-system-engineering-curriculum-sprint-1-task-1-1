@@ -1,9 +1,5 @@
 # Coldline Task 1.1 — Opening checkpoint
 
-This directory is the canonical authoring snapshot for Task 1.1. It is runnable and intended for a
-later history-free export. It is still unpublished: CMS provenance, protected evaluation, licensing,
-independent pilot evidence, and fresh real-Codespaces qualification remain release gates.
-
 The supplied system runs one bounded asynchronous workflow:
 
 ```text
@@ -47,6 +43,11 @@ shorter `uv run --frozen poe <task>` form works.
 | Grafana | `http://localhost:3000` | Use the focused diagnostics dashboard |
 | Prometheus | `http://localhost:9090` | Query bounded metrics |
 | Jaeger | `http://localhost:16686` | Inspect local traces |
+
+Each of these ports can be overridden by setting the matching `COLDLINE_API_HOST_PORT`,
+`COLDLINE_GRAFANA_HOST_PORT`, `COLDLINE_PROMETHEUS_HOST_PORT`, or `COLDLINE_JAEGER_HOST_PORT` environment
+variable (see `.env.example`) before running `poe start`, if a default collides with something already
+running on your machine.
 
 PostgreSQL, Redis, worker metrics, and OTLP remain inside the Compose network. Codespaces uses the
 same `compose.yaml` and keeps every forwarded port private.
@@ -117,15 +118,3 @@ See [JobQueue fidelity](docs/fidelity/JobQueue.md) and
 [ModelProvider fidelity](docs/fidelity/ModelProvider.md) for the active adapter boundaries. The
 [local runtime evidence](docs/fidelity/local-runtime.md) records the current measurement and its
 qualification limits.
-
-## Authoring and publication status
-
-`poe author-verify` and `poe dogfood-verify` are curriculum-owned gates. They add strict typing,
-source tests, dependency-direction checks, configuration ownership, pins, restart/recovery, and
-export hygiene around the public student command.
-
-The nested workflow is the future exported Task workflow. The curriculum repository also runs a
-separate authoring workflow because nested workflows do not execute from this monorepo location.
-
-This snapshot is authoring-ready and unpublished because its local gates and reviews passed. It is
-not a published template or a CMS-generated student repository.
