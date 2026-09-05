@@ -7,25 +7,61 @@
 # Concepts: Versioned engineering evidence
 # Tools: YAML
 
-# Complete each answer after running the published Task 1.1 scenario.
+# Complete each answer after running the Task 1.1 scenario.
 # Empty values and placeholder text fail public verification.
-# Do not submit secrets, personal data, local absolute paths, or protected evaluator details.
+# Do not submit secrets, personal data, or local absolute paths.
 # See submission-sample.yaml for a completed fictional shape.
 answers:
-  # Runtime result. Allowed values: ready or blocked.
+  # Runtime result. Choose one: ready or blocked.
   runtime_state: ""
   # Scenario identifier printed by `poe scenario`; 8-100 characters.
   scenario_id: ""
-  # Active interface names from the five visible ports; include at least one unique value.
-  active_ports: []
-  # One lowercase 32-hex Jaeger trace ID, without a URL or personal path.
-  trace_reference: ""
-  # The `|` begins a multiline string. Write 40-1000 characters of observed evidence.
-  observation: |
-    Replace this line with one reproducible observation.
-  # The `|` begins a multiline string. Write 20-1000 characters about an unresolved gap.
-  unresolved_gap: |
-    Replace this line with one evidence gap.
-  # The `|` begins a multiline string. Write 30-1000 characters about local fidelity.
-  fidelity_limitation: |
-    Replace this line with one local-runtime limitation.
+  # Step 1: Name the seven numbered running components in the architecture map.
+  # Enter one lowercase, dash-separated name for each diagram number.
+  # Choose from: api, redis-streams, worker, postgresql, jaeger, prometheus, grafana.
+  # Replace every empty value; use each permitted value exactly once.
+  architecture_map:
+    component_1: ""
+    component_2: ""
+    component_3: ""
+    component_4: ""
+    component_5: ""
+    component_6: ""
+    component_7: ""
+  # Step 2: List the active application ports you observed, one choice per line.
+  # Choose from: ModelProvider, Retriever, ObjectStore, JobQueue, SecretProvider.
+  # The two XXX values show list syntax. Submit 1-5 different choices; add or remove list items as needed.
+  # Replace every XXX value with a different choice.
+  active_ports:
+    - "XXX"
+    - "XXX"
+  # Step 3: Copy the API trace ID from Jaeger; use one lowercase 32-hex value.
+  api_trace_id: ""
+  # Step 3: Copy the worker trace ID from Jaeger; use one lowercase 32-hex value.
+  worker_trace_id: ""
+  # Step 3: Classify one observed or missing connection without prose.
+  # Choose different expected_behavior and observed_result values.
+  evidence_gap:
+    # Choose from: api, worker, redis-streams, postgresql, model-provider, opentelemetry, jaeger, prometheus, grafana.
+    source_component: ""
+    # Choose from: api, worker, redis-streams, postgresql, model-provider, opentelemetry, jaeger, prometheus, grafana.
+    target_component: ""
+    # Choose from: http-request, database-write, queue-publish, queue-consume, model-call, trace-context, telemetry-export, metrics-scrape, dashboard-query.
+    connection_type: ""
+    # Choose one:
+    # same-trace: source and target spans use the same trace ID.
+    # separate-traces: source and target spans use different trace IDs.
+    # metrics-only: metrics show each component, but no trace connects them.
+    # not-observed: the supplied evidence shows no telemetry for the connection.
+    expected_behavior: ""
+    # Choose one:
+    # same-trace: source and target spans use the same trace ID.
+    # separate-traces: source and target spans use different trace IDs.
+    # metrics-only: metrics show each component, but no trace connects them.
+    # not-observed: the supplied evidence shows no telemetry for the connection.
+    observed_result: ""
+  # Choose one:
+  # local-compose-only: local Docker Compose does not prove a managed deployment.
+  # deterministic-model-only: the supplied model adapter does not prove production-provider behavior.
+  # no-production-scale: one local scenario does not prove production traffic or resilience.
+  fidelity_limitation: ""

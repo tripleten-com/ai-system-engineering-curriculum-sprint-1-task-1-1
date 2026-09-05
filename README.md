@@ -15,10 +15,7 @@ evidence.
 
 There is no hosted model, LocalStack service, UI, or agent framework in Task 1.1.
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)]({{CODESPACES_URL}})
-
-The Codespaces URL is an authoring substitution token. CMS must replace it with the exact generated
-repository and supported branch. A remaining token blocks publication.
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/tripleten-com/ai-system-engineering-curriculum-sprint-1-task-1-1/tree/main)
 
 ## Start the system
 
@@ -84,7 +81,9 @@ The application source lives in five flat packages:
 ## Task boundary
 
 Task 1.1 asks you to run and orient to the supplied system, identify the five application ports,
-map the API, worker, queue, data, and observability boundaries, and record one baseline trace.
+name the seven numbered components of the supplied architecture map in `submission.yaml`, and
+record API-side and worker-side baseline trace IDs plus one structured evidence-gap
+classification.
 
 Only these paths are student-editable:
 
@@ -100,10 +99,14 @@ cannot grade engineering judgment. The instructor reviews the quality of the evi
 2. Read the codebase guide and locate the five interfaces under `src/ports/`.
 3. Run `poe scenario`.
 4. Inspect the returned state, API and worker logs, traces, metrics, and dashboard.
-5. Complete the two permitted files.
+5. Complete the two permitted files. `submission.yaml` records the numbered seven-component
+   architecture map, one to five distinct active port interface names, one API trace ID, one worker
+   trace ID, controlled evidence-gap values, and one `fidelity_limitation` category; use its inline
+   comments for the allowed format and choices.
 6. Run `poe verify`.
 
-Use evidence for every claim. Record uncertainty as an unresolved gap instead of guessing.
+Use evidence for every claim. Record uncertainty as an `evidence_gap` classification instead of
+guessing.
 
 ## Operational limits
 
@@ -115,6 +118,4 @@ Named volumes preserve local PostgreSQL, Redis, Prometheus, Grafana, and Jaeger 
 `poe stop`. The `poe reset` command deletes that state. This topology makes no backup,
 replication, high-availability, disaster-recovery, capacity, latency-SLO, or availability claim.
 See [JobQueue fidelity](docs/fidelity/JobQueue.md) and
-[ModelProvider fidelity](docs/fidelity/ModelProvider.md) for the active adapter boundaries. The
-[local runtime evidence](docs/fidelity/local-runtime.md) records the current measurement and its
-qualification limits.
+[ModelProvider fidelity](docs/fidelity/ModelProvider.md) for the active adapter boundaries.

@@ -11,12 +11,23 @@
 answers:
   runtime_state: ready
   scenario_id: fictional-orientation-scenario
+  architecture_map:
+    component_1: worker
+    component_2: postgresql
+    component_3: api
+    component_4: redis-streams
+    component_5: prometheus
+    component_6: grafana
+    component_7: jaeger
   active_ports:
     - Retriever
-  trace_reference: 0123456789abcdef0123456789abcdef
-  observation: |
-    The fictional request produced a visible service response and trace in the local tool.
-  unresolved_gap: |
-    Background work was outside the boundary of this fictional example.
-  fidelity_limitation: |
-    This local fictional run does not prove managed-service or production-scale behavior.
+    - ObjectStore
+  api_trace_id: 0123456789abcdef0123456789abcdef
+  worker_trace_id: fedcba9876543210fedcba9876543210
+  evidence_gap:
+    source_component: opentelemetry
+    target_component: jaeger
+    connection_type: telemetry-export
+    expected_behavior: same-trace
+    observed_result: not-observed
+  fidelity_limitation: no-production-scale
