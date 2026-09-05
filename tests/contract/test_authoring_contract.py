@@ -3,11 +3,11 @@
 ===================
 
 File:              tests/contract/test_authoring_contract.py
-Component:         Authoring verifier contract
-Purpose:           Runs the same structural gate used before export.
-Interacts With:    tests.contract.authoring and the complete Task tree
+Component:         Repository integrity contract
+Purpose:           Verifies required Task repository structure and configuration.
+Interacts With:    Repository integrity checks and the complete Task tree
 Sprint/Task:       Sprint 1 — Project 1 / Task 1.1
-Concepts:          Dependency direction, configuration ownership, export hygiene
+Concepts:          Dependency direction, configuration ownership, repository integrity
 Tools:             Python 3.12, pytest
 """
 
@@ -51,9 +51,14 @@ COMMENTABLE_CONFIGURATION = (
 )
 
 
-def test_current_snapshot_satisfies_the_authoring_contract() -> None:
+def test_current_repository_satisfies_the_integrity_contract() -> None:
     """Fail when a protected repository invariant drifts."""
     assert authoring.main() == 0
+
+
+def test_released_repository_has_no_unresolved_template_tokens() -> None:
+    """A student-facing README must not contain an unresolved placeholder."""
+    assert authoring._check_unresolved_template_tokens([TASK_ROOT / "README.md"]) == []
 
 
 def test_python_files_have_the_student_navigation_banner() -> None:

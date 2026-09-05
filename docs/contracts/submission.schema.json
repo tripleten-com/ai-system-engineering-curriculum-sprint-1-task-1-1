@@ -14,10 +14,11 @@
       "required": [
         "runtime_state",
         "scenario_id",
+        "architecture_map",
         "active_ports",
-        "trace_reference",
-        "observation",
-        "unresolved_gap",
+        "api_trace_id",
+        "worker_trace_id",
+        "evidence_gap",
         "fidelity_limitation"
       ],
       "properties": {
@@ -31,37 +32,85 @@
           "minLength": 8,
           "maxLength": 100
         },
+        "architecture_map": {
+          "description": "The seven numbered running components identified from the Step 1 architecture map.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "component_1",
+            "component_2",
+            "component_3",
+            "component_4",
+            "component_5",
+            "component_6",
+            "component_7"
+          ],
+          "properties": {
+            "component_1": {"enum": ["api", "redis-streams", "worker", "postgresql", "jaeger", "prometheus", "grafana"]},
+            "component_2": {"enum": ["api", "redis-streams", "worker", "postgresql", "jaeger", "prometheus", "grafana"]},
+            "component_3": {"enum": ["api", "redis-streams", "worker", "postgresql", "jaeger", "prometheus", "grafana"]},
+            "component_4": {"enum": ["api", "redis-streams", "worker", "postgresql", "jaeger", "prometheus", "grafana"]},
+            "component_5": {"enum": ["api", "redis-streams", "worker", "postgresql", "jaeger", "prometheus", "grafana"]},
+            "component_6": {"enum": ["api", "redis-streams", "worker", "postgresql", "jaeger", "prometheus", "grafana"]},
+            "component_7": {"enum": ["api", "redis-streams", "worker", "postgresql", "jaeger", "prometheus", "grafana"]}
+          }
+        },
         "active_ports": {
-          "description": "Ports observed in the supplied opening checkpoint.",
+          "description": "One to five active port interfaces observed in the supplied opening checkpoint.",
           "type": "array",
           "minItems": 1,
+          "maxItems": 5,
           "uniqueItems": true,
           "items": {
             "enum": ["ModelProvider", "Retriever", "ObjectStore", "JobQueue", "SecretProvider"]
           }
         },
-        "trace_reference": {
-          "description": "One 32-character trace identifier copied from the local run.",
+        "api_trace_id": {
+          "description": "One 32-character API trace identifier copied from the local run.",
           "type": "string",
+          "minLength": 32,
+          "maxLength": 32,
           "pattern": "^[0-9a-f]{32}$"
         },
-        "observation": {
-          "description": "What the student directly observed in the running system.",
+        "worker_trace_id": {
+          "description": "One 32-character worker trace identifier copied from the local run.",
           "type": "string",
-          "minLength": 40,
-          "maxLength": 1000
+          "minLength": 32,
+          "maxLength": 32,
+          "pattern": "^[0-9a-f]{32}$"
         },
-        "unresolved_gap": {
-          "description": "One important question the current evidence does not answer.",
-          "type": "string",
-          "minLength": 20,
-          "maxLength": 1000
+        "evidence_gap": {
+          "description": "One bounded classification where the expected and observed connection states differ.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source_component",
+            "target_component",
+            "connection_type",
+            "expected_behavior",
+            "observed_result"
+          ],
+          "properties": {
+            "source_component": {
+              "enum": ["api", "worker", "redis-streams", "postgresql", "model-provider", "opentelemetry", "jaeger", "prometheus", "grafana"]
+            },
+            "target_component": {
+              "enum": ["api", "worker", "redis-streams", "postgresql", "model-provider", "opentelemetry", "jaeger", "prometheus", "grafana"]
+            },
+            "connection_type": {
+              "enum": ["http-request", "database-write", "queue-publish", "queue-consume", "model-call", "trace-context", "telemetry-export", "metrics-scrape", "dashboard-query"]
+            },
+            "expected_behavior": {
+              "enum": ["same-trace", "separate-traces", "metrics-only", "not-observed"]
+            },
+            "observed_result": {
+              "enum": ["same-trace", "separate-traces", "metrics-only", "not-observed"]
+            }
+          }
         },
         "fidelity_limitation": {
-          "description": "What the local stack cannot prove about a managed production system.",
-          "type": "string",
-          "minLength": 30,
-          "maxLength": 1000
+          "description": "The bounded local-runtime limitation category observed for the Task.",
+          "enum": ["local-compose-only", "deterministic-model-only", "no-production-scale"]
         }
       }
     }

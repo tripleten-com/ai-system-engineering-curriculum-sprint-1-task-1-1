@@ -43,7 +43,7 @@ ARTIFACTS = {
 
 
 def main() -> int:
-    """Download, authenticate, and install uv and uvx inside this snapshot."""
+    """Download, authenticate, and install uv and uvx inside this repository."""
     key = (platform.system(), platform.machine())
     if key not in ARTIFACTS:
         raise SystemExit(f"unsupported bootstrap platform: {key[0]} {key[1]}")
