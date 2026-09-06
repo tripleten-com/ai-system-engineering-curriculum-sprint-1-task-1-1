@@ -1,12 +1,12 @@
-"""Coldline — Task 1.1.
+"""Coldline.
 
 ===================
 
 File:              tests/e2e/scenario.py
 Component:         End-to-end tests — Scenario
-Purpose:           Run the supplied Task 1.1 baseline exception scenario.
+Purpose:           Run the supplied baseline exception scenario.
 Interacts With:    External API, worker, storage, and telemetry
-Sprint/Task:       Sprint 1 — Project 1 / Task 1.1
+Sprint/Task:       Sprint 1 — Project 1
 Concepts:          Black-box workflow, durable identity, evidence
 Tools:             Python 3.12, pytest
 """

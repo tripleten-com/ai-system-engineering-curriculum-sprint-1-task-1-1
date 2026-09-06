@@ -1,4 +1,4 @@
-"""Coldline — Task 1.1.
+"""Coldline.
 
 ===================
 
@@ -6,7 +6,7 @@ File:              tests/unit/test_bootstrap.py
 Component:         Unit tests — Bootstrap
 Purpose:           Keep the pinned uv bootstrap re-runnable without network access.
 Interacts With:    infra/scripts/bootstrap.py
-Sprint/Task:       Sprint 1 — Project 1 / Task 1.1
+Sprint/Task:       Sprint 1 — Project 1
 Concepts:          Reproducibility, idempotency, version parsing
 Tools:             Python 3.12, pytest
 """
