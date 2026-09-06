@@ -298,11 +298,94 @@ def test_template_describes_each_bounded_fidelity_limitation_option() -> None:
 
 
 def test_student_documentation_describes_the_fidelity_limitation_field() -> None:
-    """Every student-facing Task guide must direct students to the controlled enum."""
-    for documentation in (ROOT / "README.md", ROOT / "docs/student/codebase-guide.md"):
-        content = documentation.read_text(encoding="utf-8")
+    """The student entrypoint must direct students to the controlled enum."""
+    content = (ROOT / "README.md").read_text(encoding="utf-8")
 
-        assert "`fidelity_limitation`" in content
+    assert "`fidelity_limitation`" in content
+
+
+def test_readme_is_the_only_student_orientation_entrypoint() -> None:
+    """Task orientation must not ship as a second answer-revealing guide."""
+    assert not (ROOT / "docs/student/codebase-guide.md").exists()
+    assert "codebase-guide.md" not in (ROOT / "README.md").read_text(encoding="utf-8")
+
+
+def test_readme_keeps_neutral_codebase_orientation_sections() -> None:
+    """README must guide investigation without supplying the port-status answer."""
+    content = (ROOT / "README.md").read_text(encoding="utf-8")
+
+    for heading in (
+        "## Overview",
+        "## Folder map",
+        "## The five ports",
+        "## Test levels",
+        "## Command path",
+    ):
+        assert heading in content
+
+    assert "| `ModelProvider` | Active" not in content
+
+
+def test_readme_lists_all_five_ports_without_status_answers() -> None:
+    """README must name port capabilities without disclosing which are active."""
+    content = (ROOT / "README.md").read_text(encoding="utf-8")
+
+    assert "| Port | General responsibility |" in content
+    for port in ("ModelProvider", "Retriever", "ObjectStore", "JobQueue", "SecretProvider"):
+        assert f"| `{port}` |" in content
+
+    assert "| `JobQueue` | Active" not in content
+
+
+def test_readme_folder_map_is_a_visible_task_tree() -> None:
+    """README must show the supplied repository layout, not only a package table."""
+    content = (ROOT / "README.md").read_text(encoding="utf-8")
+
+    assert "```text\nrepository root/\n├── docs/" in content
+    assert "├── src/" in content
+    assert "└── tests/" in content
+
+
+def test_readme_describes_platform_and_port_override_boundaries() -> None:
+    """README must state bootstrap support and keep port overrides across commands."""
+    content = " ".join((ROOT / "README.md").read_text(encoding="utf-8").split())
+
+    assert "macOS arm64/x86-64, Windows x86-64, and Linux x86-64/aarch64" in content
+    assert "cannot run the stack locally, use the Codespaces button above" in content
+    assert "the interpreter is `python3`" in content
+    assert "local `.env` file" in content
+    assert "every `poe` command" in content
+    assert "| `poe stop` | Remove containers and the network, keeping named volumes |" in content
+    assert "| `poe reset` | Remove containers, the network, and local named volumes |" in content
+
+
+def test_readme_uses_the_student_onboarding_order() -> None:
+    """README must present the approved orientation sections in order."""
+    content = (ROOT / "README.md").read_text(encoding="utf-8")
+
+    headings = (
+        "## Start the system",
+        "## Command path",
+        "## Folder map",
+        "## Overview",
+        "## The five ports",
+        "## Test levels",
+        "## Task boundary",
+        "## Local data safety",
+    )
+    positions = [content.index(heading) for heading in headings]
+
+    assert positions == sorted(positions)
+    assert "## Runtime flow" not in content
+
+
+def test_readme_overview_lists_the_orientation_paths() -> None:
+    """README overview must direct students to the supplied investigation paths."""
+    content = (ROOT / "README.md").read_text(encoding="utf-8")
+
+    assert "## Overview" in content
+    for path in ("`README.md`", "`compose.yaml`", "`docs/student/`", "`src/`", "`tests/`"):
+        assert path in content
 
 
 def test_blank_template_fails_with_field_address(tmp_path: Path) -> None:
