@@ -1,26 +1,15 @@
 # Coldline Task 1.1 — Opening checkpoint
 
-The supplied system runs one bounded asynchronous workflow:
-
-```text
-sensor reading -> API -> PostgreSQL -> Redis Streams -> worker -> PostgreSQL
-                    |                                      |
-                    +---------- local telemetry -----------+
-```
-
-The API accepts an out-of-range synthetic shipment reading. PostgreSQL stores its durable state.
-Redis Streams carries a provider-neutral `JobQueue` message. The worker calls the deterministic
-`ModelProvider` and stores the result. Prometheus, Grafana, and Jaeger provide local diagnostic
-evidence.
-
-There is no hosted model, LocalStack service, UI, or agent framework in Task 1.1.
-
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/tripleten-com/ai-system-engineering-curriculum-sprint-1-task-1-1/tree/main)
 
 ## Start the system
 
-Prerequisites are Python 3.12 and Docker with Compose v2. The bootstrap installs pinned uv 0.11.8
-under `.tools/bin`.
+Prerequisites are Python 3.12 and Docker with Compose v2. The supplied bootstrap supports macOS
+arm64/x86-64, Windows x86-64, and Linux x86-64/aarch64, and installs pinned uv 0.11.8 under
+`.tools/bin`. If your computer cannot run the stack locally, use the Codespaces button above.
+
+On macOS and most Linux distributions the interpreter is `python3`; substitute it wherever these
+commands say `python`.
 
 ```shell
 python infra/scripts/bootstrap.py
@@ -43,29 +32,23 @@ shorter `uv run --frozen poe <task>` form works.
 
 Each of these ports can be overridden by setting the matching `COLDLINE_API_HOST_PORT`,
 `COLDLINE_GRAFANA_HOST_PORT`, `COLDLINE_PROMETHEUS_HOST_PORT`, or `COLDLINE_JAEGER_HOST_PORT` environment
-variable (see `.env.example`) before running `poe start`, if a default collides with something already
-running on your machine.
+variable in your shell environment or a local `.env` file (copy `.env.example`) if a default
+collides with something already running on your machine. Keep the override in place for every
+`poe` command.
 
 PostgreSQL, Redis, worker metrics, and OTLP remain inside the Compose network. Codespaces uses the
 same `compose.yaml` and keeps every forwarded port private.
 
-## Find your way around
+## Command path
 
-Start with the [codebase guide](docs/student/codebase-guide.md). It explains the reading order,
-folder responsibilities, runtime flow, five ports, tests, commands, and files that cannot safely
-contain comments.
+For a fresh investigation, run the supplied commands in this order:
 
-The application source lives in five flat packages:
-
-| Package | Responsibility |
-|---|---|
-| `api` | HTTP delivery, API use case, configuration, and composition |
-| `worker` | Background processing, retries, configuration, and composition |
-| `domain` | Provider-neutral contracts, state rules, identity, and redaction |
-| `ports` | Exactly five visible application interfaces |
-| `adapters` | PostgreSQL, Redis Streams, deterministic model, logs, and traces |
-
-## Common commands
+```text
+poe start
+poe ready
+poe scenario
+poe verify
+```
 
 | Command | Use |
 |---|---|
@@ -75,47 +58,77 @@ The application source lives in five flat packages:
 | `poe e2e` | Run the external API-to-worker workflow |
 | `poe verify` | Run the public student verification path |
 | `poe restart` | Restart API and worker processes |
-| `poe stop` | Stop containers and keep named volumes |
-| `poe reset` | Stop containers and delete local named volumes |
+| `poe stop` | Remove containers and the network, keeping named volumes |
+| `poe reset` | Remove containers, the network, and local named volumes |
+
+## Folder map
+
+```text
+repository root/
+├── docs/                Student guidance, public contracts, and fidelity notes
+│   ├── contracts/       Machine-readable public contracts
+│   ├── fidelity/        Local-runtime boundary notes
+│   └── student/         Student-owned submission documents
+├── infra/               Local setup and runtime configuration
+├── src/
+│   ├── api/             HTTP application code
+│   ├── worker/          Background application code
+│   ├── domain/          Shared domain code and data contracts
+│   ├── ports/           Application interfaces
+│   └── adapters/        Technology-specific implementations
+└── tests/
+    ├── unit/            Isolated behavior checks
+    ├── contract/        Interface and repository checks
+    ├── smoke/           Running-platform checks
+    └── e2e/             Supplied workflow checks
+```
+
+## Overview
+
+Use the Task 1.1 lesson to decide what evidence to collect. This README covers local setup and
+repository orientation; investigate the supplied system from your own run.
+
+1. `README.md` — local setup and commands.
+2. `compose.yaml` — the supplied local services.
+3. `docs/student/` — the permitted submission documents.
+4. `src/` — application code.
+5. `tests/` — automated checks for the supplied system.
+
+## The five ports
+
+Find the available interfaces in `src/ports/`. A port describes an application capability; an
+adapter provides it using a concrete technology. Determine which ports are active from your own
+runtime evidence rather than from this guide.
+
+| Port | General responsibility |
+|---|---|
+| `ModelProvider` | Call an AI model service |
+| `Retriever` | Look up relevant context or documents |
+| `ObjectStore` | Store large binary objects or files |
+| `JobQueue` | Publish and consume background work |
+| `SecretProvider` | Read API keys and credentials |
+
+## Test levels
+
+| Level | Requires Compose | Main question |
+|---|---:|---|
+| Unit | No | Does one responsibility behave correctly, including failures? |
+| Contract | Usually no | Do interfaces, schemas, paths, and dependency rules stay compatible? |
+| Smoke | Yes | Did the complete local platform initialize and become observable? |
+| E2E | Yes | Can an external client complete the supplied workflow? |
 
 ## Task boundary
 
-Task 1.1 asks you to run and orient to the supplied system, identify the five application ports,
-name the seven numbered components of the supplied architecture map in `submission.yaml`, and
-record API-side and worker-side baseline trace IDs plus one structured evidence-gap
-classification.
+Follow the Task 1.1 lesson and the inline comments in `submission.yaml` for submission
+requirements. Use observed evidence rather than assumptions. The controlled
+`fidelity_limitation` field accepts one of the values documented in the template comments.
 
 Only these paths are student-editable:
 
 - `submission.yaml`
 - `docs/student/task-1-1-baseline.md`
 
-The public verifier checks runtime behavior, answer structure, completeness, and allowed paths. It
-cannot grade engineering judgment. The instructor reviews the quality of the evidence and reasoning.
+## Local data safety
 
-### Student walkthrough
-
-1. Start the stack and run `poe ready`.
-2. Read the codebase guide and locate the five interfaces under `src/ports/`.
-3. Run `poe scenario`.
-4. Inspect the returned state, API and worker logs, traces, metrics, and dashboard.
-5. Complete the two permitted files. `submission.yaml` records the numbered seven-component
-   architecture map, one to five distinct active port interface names, one API trace ID, one worker
-   trace ID, controlled evidence-gap values, and one `fidelity_limitation` category; use its inline
-   comments for the allowed format and choices.
-6. Run `poe verify`.
-
-Use evidence for every claim. Record uncertainty as an `evidence_gap` classification instead of
-guessing.
-
-## Operational limits
-
-This local system has no user authentication, authorization, TLS termination, or production secret
-store. The Compose PostgreSQL password is a local-only non-secret credential. Never place real
-credentials, personal data, or production records in this repository.
-
-Named volumes preserve local PostgreSQL, Redis, Prometheus, Grafana, and Jaeger state across
-`poe stop`. The `poe reset` command deletes that state. This topology makes no backup,
-replication, high-availability, disaster-recovery, capacity, latency-SLO, or availability claim.
-See [JobQueue fidelity](docs/fidelity/JobQueue.md) and
-[ModelProvider fidelity](docs/fidelity/ModelProvider.md) for the active adapter boundaries.
+Use synthetic data only. Do not add real credentials, personal data, or production records to this
+repository. `poe stop` keeps local named volumes; `poe reset` removes them for a clean run.
