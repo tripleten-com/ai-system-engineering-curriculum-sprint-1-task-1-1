@@ -1,4 +1,4 @@
-"""Coldline — Task 1.1.
+"""Coldline.
 
 ===================
 
@@ -6,7 +6,7 @@ File:              tests/contract/test_repository_structure.py
 Component:         Repository structure contract
 Purpose:           Keeps the student-visible tree small and predictable.
 Interacts With:    Task root, src packages, docs, infrastructure, and tests
-Sprint/Task:       Sprint 1 — Project 1 / Task 1.1
+Sprint/Task:       Sprint 1 — Project 1
 Concepts:          Navigability, package ownership, repository integrity
 Tools:             Python 3.12, pytest
 """

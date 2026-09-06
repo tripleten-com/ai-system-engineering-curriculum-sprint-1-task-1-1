@@ -1,4 +1,4 @@
-"""Coldline — Task 1.1.
+"""Coldline.
 
 ===================
 
@@ -6,7 +6,7 @@ File:              tests/contract/authoring.py
 Component:         Repository integrity verifier
 Purpose:           Checks required Task repository structure and configuration.
 Interacts With:    Source packages, Compose, Codespaces, schemas, and uv.lock
-Sprint/Task:       Sprint 1 — Project 1 / Task 1.1
+Sprint/Task:       Sprint 1 — Project 1
 Concepts:          Dependency direction, identity parity, repository integrity
 Tools:             Python 3.12, AST, uv, Docker Compose YAML
 """
@@ -137,7 +137,7 @@ def _check_placeholders(files: list[Path]) -> list[str]:
         if path.name == ".gitkeep":
             failures.append(f"placeholder remains: {relative}")
         if "localstack" in lowered:
-            failures.append(f"LocalStack path is forbidden in Task 1.1: {relative}")
+            failures.append(f"LocalStack path is forbidden in this Sprint: {relative}")
         if any(part in lowered for part in ("solution", "held-out", "evaluator", "instructor")):
             failures.append(f"restricted-looking path is forbidden: {relative}")
     return failures
