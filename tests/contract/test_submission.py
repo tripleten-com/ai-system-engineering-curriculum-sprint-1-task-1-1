@@ -200,7 +200,7 @@ def test_active_ports_reject_empty_duplicate_or_unbounded_lists(
 
 def test_template_explains_that_active_port_items_are_variable() -> None:
     """Two placeholders demonstrate list syntax rather than a fixed answer count."""
-    template = (ROOT / "submission.yaml").read_text(encoding="utf-8")
+    template = (ROOT / "tests/fixtures/submission-template.yaml").read_text(encoding="utf-8")
 
     assert "add or remove list items as needed" in template
 
@@ -268,7 +268,7 @@ def test_fidelity_limitation_is_a_bounded_enum_without_free_text(tmp_path: Path)
 
 def test_template_describes_each_bounded_fidelity_limitation_option() -> None:
     """The worksheet exposes option meanings without asking for a prose limitation."""
-    template = (ROOT / "submission.yaml").read_text(encoding="utf-8")
+    template = (ROOT / "tests/fixtures/submission-template.yaml").read_text(encoding="utf-8")
     schema = json.loads(
         (ROOT / "docs/contracts/submission.schema.json").read_text(encoding="utf-8")
     )
@@ -391,7 +391,10 @@ def test_readme_overview_lists_the_orientation_paths() -> None:
 def test_blank_template_fails_with_field_address(tmp_path: Path) -> None:
     """An untouched answer sheet must identify an incomplete field."""
     submission = tmp_path / "submission.yaml"
-    submission.write_text((ROOT / "submission.yaml").read_text(encoding="utf-8"), encoding="utf-8")
+    submission.write_text(
+        (ROOT / "tests/fixtures/submission-template.yaml").read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
 
     with pytest.raises(SubmissionError, match="answers.active_ports"):
         validate_submission(submission, ROOT / "docs/contracts/submission.schema.json")
@@ -530,7 +533,7 @@ def test_untouched_baseline_markers_are_rejected(tmp_path: Path) -> None:
     """The public verifier must require the remaining narrative sections."""
     baseline = tmp_path / "task-1-1-baseline.md"
     baseline.write_text(
-        (ROOT / "docs/student/task-1-1-baseline.md").read_text(encoding="utf-8"),
+        (ROOT / "tests/fixtures/task-1-1-baseline-template.md").read_text(encoding="utf-8"),
         encoding="utf-8",
     )
 
@@ -550,7 +553,7 @@ def test_each_untouched_narrative_marker_is_rejected(
     tmp_path: Path, narrative_section: str
 ) -> None:
     """Leaving any single remaining narrative section untouched must still fail."""
-    template = (ROOT / "docs/student/task-1-1-baseline.md").read_text(encoding="utf-8")
+    template = (ROOT / "tests/fixtures/task-1-1-baseline-template.md").read_text(encoding="utf-8")
     assert f"## {narrative_section}" in template
 
     completed = _complete_baseline(template)
@@ -571,7 +574,7 @@ def test_each_untouched_narrative_marker_is_rejected(
 
 def test_baseline_template_carries_no_second_architecture_map() -> None:
     """Students answer the architecture map in `submission.yaml`, not the baseline document."""
-    template = (ROOT / "docs/student/task-1-1-baseline.md").read_text(encoding="utf-8")
+    template = (ROOT / "tests/fixtures/task-1-1-baseline-template.md").read_text(encoding="utf-8")
 
     assert "## Architecture map" not in template
     assert "_Create your concise map here._" not in template
@@ -580,7 +583,7 @@ def test_baseline_template_carries_no_second_architecture_map() -> None:
 
 def test_former_architecture_map_marker_is_not_required(tmp_path: Path) -> None:
     """A leftover map placeholder must no longer block a completed narrative."""
-    template = (ROOT / "docs/student/task-1-1-baseline.md").read_text(encoding="utf-8")
+    template = (ROOT / "tests/fixtures/task-1-1-baseline-template.md").read_text(encoding="utf-8")
 
     baseline = tmp_path / "task-1-1-baseline.md"
     baseline.write_text(
@@ -595,7 +598,7 @@ def test_completed_baseline_without_architecture_map_passes_structure_validation
     tmp_path: Path,
 ) -> None:
     """A filled template that carries no architecture map passes structural validation."""
-    template = (ROOT / "docs/student/task-1-1-baseline.md").read_text(encoding="utf-8")
+    template = (ROOT / "tests/fixtures/task-1-1-baseline-template.md").read_text(encoding="utf-8")
     completed = _complete_baseline(template)
     assert "## Architecture map" not in completed
 
@@ -619,7 +622,8 @@ def test_public_entrypoint_reports_an_incomplete_answer_sheet(
     """Catch a verifier entrypoint that skips the real submission contract."""
     (tmp_path / "docs/contracts").mkdir(parents=True)
     (tmp_path / "submission.yaml").write_text(
-        (ROOT / "submission.yaml").read_text(encoding="utf-8"), encoding="utf-8"
+        (ROOT / "tests/fixtures/submission-template.yaml").read_text(encoding="utf-8"),
+        encoding="utf-8",
     )
     (tmp_path / "submission-sample.yaml").write_text(
         (ROOT / "submission-sample.yaml").read_text(encoding="utf-8"), encoding="utf-8"
