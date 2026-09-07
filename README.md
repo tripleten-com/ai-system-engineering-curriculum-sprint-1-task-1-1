@@ -57,7 +57,7 @@ poe verify
 | `poe smoke` | Check the initialized running platform |
 | `poe e2e` | Run the external API-to-worker workflow |
 | `poe verify` | Run the public student verification path |
-| `poe restart` | Restart API and worker processes |
+| `poe restart` | Restart the existing API and worker containers **without rebuilding**; run `poe start` instead after editing source |
 | `poe stop` | Remove containers and the network, keeping named volumes |
 | `poe reset` | Remove containers, the network, and local named volumes |
 

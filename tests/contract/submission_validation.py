@@ -271,6 +271,8 @@ def _load_one_document(path: Path) -> dict[str, Any]:
         )
     except yaml.YAMLError as exc:
         raise SubmissionError(f"{path.name} must contain restricted YAML") from exc
+    except (OSError, UnicodeError) as exc:
+        raise SubmissionError(f"{path.name}: cannot read a UTF-8 answer sheet") from exc
     if len(documents) != 1 or not isinstance(documents[0], dict):
         raise SubmissionError(f"{path.name} must contain exactly one YAML mapping")
     return documents[0]
