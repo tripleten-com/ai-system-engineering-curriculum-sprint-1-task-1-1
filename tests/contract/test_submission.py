@@ -351,7 +351,8 @@ def test_readme_describes_platform_and_port_override_boundaries() -> None:
     content = " ".join((ROOT / "README.md").read_text(encoding="utf-8").split())
 
     assert "macOS arm64/x86-64, Windows x86-64, and Linux x86-64/aarch64" in content
-    assert "cannot run the stack locally, use the Codespaces button above" in content
+    assert "cannot run the stack locally, ask your instructor about GitHub Codespaces" in content
+    assert "codespaces.new" not in content
     assert "the interpreter is `python3`" in content
     assert "local `.env` file" in content
     assert "every `poe` command" in content
